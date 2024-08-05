@@ -31,10 +31,7 @@ const Register = () => {
       // Save the token in session storage
       sessionStorage.setItem("token", res.data.token);
 
-     
-
-     
-      // window.location.href = '/dashboard'; // Adjust the URL as needed
+      window.location.href = "/classes";
     } catch (err) {
       console.error(err.response.data);
     }

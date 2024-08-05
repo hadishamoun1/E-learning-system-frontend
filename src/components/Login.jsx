@@ -26,12 +26,9 @@ const Login = () => {
       );
       console.log(res.data);
 
-      // Save the token in session storage
       sessionStorage.setItem("token", res.data.token);
 
-
-      // Redirect to a different page if needed
-      // window.location.href = '/dashboard'; // Adjust the URL as needed
+      window.location.href = "/classes";
     } catch (err) {
       console.error(err.response.data);
     }

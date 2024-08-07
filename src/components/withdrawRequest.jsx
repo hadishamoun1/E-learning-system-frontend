@@ -15,9 +15,20 @@ const getUserIdFromToken = () => {
   }
 };
 
+// Utility function to get token from session storage
+const getToken = () => {
+  return sessionStorage.getItem("token");
+};
+
 // Function to fetch classes from the backend
 const fetchClasses = async () => {
-  const response = await fetch("http://localhost:5000/classes"); // Adjust the URL if needed
+  const token = getToken();
+  const response = await fetch("http://localhost:5000/classes", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   if (!response.ok) {
     throw new Error("Failed to fetch classes");
   }
@@ -51,11 +62,14 @@ const WithdrawalForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const token = getToken();
+
     try {
       const response = await fetch("http://localhost:5000/api/withdraw", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ classId, reason, userId }),
       });

@@ -1,0 +1,55 @@
+.enrolled-classes-container {
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 10px;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.enrolled-classes-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.enrolled-class-card {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(33.333% - 40px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 400px;
+}
+
+.class-title {
+  font-size: 20px;
+  color: #333;
+}
+
+.class-description {
+  font-size: 16px;
+  color: #666;
+}
+
+.class-instructor {
+  font-size: 16px;
+  color: #999;
+  margin-top: auto;
+}
+
+.enrollment-date {
+  font-size: 14px;
+  color: #ccc;
+  text-align: right;
+}

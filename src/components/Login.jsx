@@ -55,6 +55,9 @@ const Login = () => {
           required
         />
         <input type="submit" value="Login" />
+        <h6>
+          Dont have an account? <a href="/register">Signup</a>
+        </h6>
       </form>
     </div>
   );

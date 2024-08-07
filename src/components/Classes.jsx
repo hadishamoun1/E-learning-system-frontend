@@ -7,6 +7,7 @@ const Classes = () => {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [enrollments, setEnrollments] = useState([]);
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -28,10 +29,17 @@ const Classes = () => {
       }
 
       try {
-        const res = await axios.get("http://localhost:5000/classes", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setClasses(res.data);
+        const [classesRes, enrollmentsRes] = await Promise.all([
+          axios.get("http://localhost:5000/classes", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get("http://localhost:5000/enrollments", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        setClasses(classesRes.data);
+        setEnrollments(enrollmentsRes.data);
         setLoading(false);
       } catch (err) {
         setError(err.response.data.message);
@@ -42,9 +50,44 @@ const Classes = () => {
     fetchClasses();
   }, []);
 
-  const handleEnroll = (classId) => {
-    // Implement enrollment logic here
-    console.log(`Enrolled in class ${classId}`);
+  const handleEnroll = async (classId) => {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      setError("No token found");
+      return;
+    }
+
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken.user.id;
+
+    const alreadyEnrolled = enrollments.some(
+      (enrollment) => enrollment.user === userId && enrollment.class === classId
+    );
+
+    if (alreadyEnrolled) {
+      alert("You are already enrolled in this class.");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/enrollments",
+        { user: userId, class: classId },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log(`Enrolled in class ${classId}`, res.data);
+
+      setEnrollments([...enrollments, res.data]);
+    } catch (err) {
+      console.error("Error:", err.response ? err.response.data : err.message);
+      if (err.response && err.response.status === 400) {
+        alert("You are already enrolled in this class.");
+      } else {
+        setError("An unexpected error occurred");
+      }
+    }
   };
 
   if (loading) return <div className="loading">Loading...</div>;
